@@ -1,10 +1,7 @@
-# nbdev_colab
+# FAST_TFRS recommendation engine
 
-Use this template to more easily create your nbdev project. This walks through creating and working out of Google Colab.
-
-Known bugs that need to be sorted (any help is welcome):
-
-* ReadMe not updating after updating `index.ipynb`
-* Tests are not passing
-
-To learn what to do, start at notebook `00_core`
+fast_tfrs, based on Google [tfrs](https://www.tensorflow.org/recommenders), is a deep learning recommendation engine that aims to be 
+- easy-to-use: no boiler-plate coding required, simple API to follow
+- easy-to-rebuild (custom): modules are lego-like, ready to be mixed and match
+- end-to-end: input raw data output predictions
+- stable and scalable for production
