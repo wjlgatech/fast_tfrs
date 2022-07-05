@@ -55,8 +55,7 @@ url = f"git+https://github.com/wjlgatech/fast_tfrs.git"
 
 As you will see in [fast_tfrs_all_code_walkthrough.ipynb](https://github.com/wjlgatech/fast_tfrs/blob/master/examples/fast_tfrs_all_code_walkthrough.ipynb): 
 
-- "StopIteration: Queue is empty, no more objects to retrieve" in section **Get the best fast_tfrs model by Bayesian tuning
-**
+- "StopIteration: Queue is empty, no more objects to retrieve" in section **Get the best fast_tfrs model by Bayesian tuning**
 
 - "TuneError: ('Trials did not complete'...)" in section **FLAML + Ray tuning**
 
