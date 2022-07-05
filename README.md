@@ -21,16 +21,16 @@ To be specific, I contrast the feature differences between `tfrs` and `fast_tfrs
   - `fast_tfrs` automates the encoding for all selected features, making it a bleeze for large scale experimentations.
 
 - feature dtype
-  - `tfrs`: requires expertise to encode feature of different data-types, include cnt(continuous feature), cat(categorical feature), txt(text feature), img (image feature), dt(datetime feature)
-  - `fast_tfrs`: provides helpers to automatically separate features of different data-types and corresponding encoders for each type.
+  - `tfrs`: requires expertise to encode feature of different data-types; multimodal data is usually handled under different modeling frameworks and each embedding takes on different dimensionalities. 
+  - `fast_tfrs`: provides helpers to automatically separate and encode features of different data-types including cnt, cat, txt, img, dt under the same modeling framework, with techniques enabling features of different dtypes being embedded with the same dimensionality.
 
 - feature selection
   - `tfrs` provides no tools
-  - `fast_tfrs` provides tools to select relevant features, at this release include L1, VSN
+  - `fast_tfrs` provides tools to select relevant features; this release includes L1 and VSN
 
 - feature crossing
   - `tfrs` provides no tools 
-  - `fast_tfrs` provides tools to feature crossing (i.e. feature interactions), at this release include DeepCrossLayer, vsn_DeepCrossLayer
+  - `fast_tfrs` provides tools to feature crossing (i.e. feature interactions); this release includes DeepCrossLayer, vsn_DeepCrossLayer
 
 - multitask
   - `tfrs` provides 2 tasks -- ranking and retrieval
@@ -61,6 +61,6 @@ As you will see in [fast_tfrs_all_code_walkthrough.ipynb](https://github.com/wjl
 
 - "feature importances plot lacks symetric" in function plot_cross_feature_importances(...) in section **Model understanding**
 
-- The integration of `classification_task`  with `retrieval_task` and `rating_task` in section **3-task w. L1/VSN features selection**
+- The integration of `classification_task`  with `retrieval_task` and `rating_task` under the `tfrs` framework in section **3-task w. L1/VSN features selection**
 
 Please let me know if you have any idea on how to fix them.
