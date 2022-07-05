@@ -50,3 +50,16 @@ To be specific, I contrast the feature differences between `tfrs` and `fast_tfrs
   - `fast_tfrs` provides 3 tasks -- ranking, retrieval and classification (imbalanced multiclass classification)
 
 `fast_tfrs` is under active development and welcomes community contribution. For recent updates, please visit https://github.com/wjlgatech/fast_tfrs
+
+## Known Issues
+
+As you will see in [fast_tfrs_all_code_walkthrough.ipynb](https://github.com/wjlgatech/fast_tfrs/blob/master/examples/fast_tfrs_all_code_walkthrough.ipynb): 
+
+- "StopIteration: Queue is empty, no more objects to retrieve" in section **Get the best fast_tfrs model by Bayesian tuning
+**
+
+- "TuneError: ('Trials did not complete'...)" in section **FLAML + Ray tuning**
+
+- "feature importances plot lacks symetric" in function plot_cross_feature_importances(...) in section **Model understanding**
+
+Please let me know if you have any idea on how to fix them.
