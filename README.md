@@ -34,7 +34,7 @@ To be specific, I contrast the feature differences between `tfrs` and `fast_tfrs
 
 - multitask
   - `tfrs` provides 2 tasks -- ranking and retrieval
-  - `fast_tfrs` provides 3 tasks -- ranking, retrieval and classification (imbalanced multiclass classification)
+  - `fast_tfrs` provides 3 tasks -- ranking, retrieval and classification (imbalanced multiclass multimodal classification)
 
 `fast_tfrs` is under active development and welcomes community contribution. For recent updates, please visit https://github.com/wjlgatech/fast_tfrs
 
