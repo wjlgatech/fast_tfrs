@@ -62,4 +62,6 @@ As you will see in [fast_tfrs_all_code_walkthrough.ipynb](https://github.com/wjl
 
 - "feature importances plot lacks symetric" in function plot_cross_feature_importances(...) in section **Model understanding**
 
+- The integration of `classification_task`  with `retrieval_task` and `rating_task` in section **3-task w. L1/VSN features selection**
+
 Please let me know if you have any idea on how to fix them.
