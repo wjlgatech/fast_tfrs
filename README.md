@@ -5,19 +5,6 @@
 `fast_tfrs` is a deep learning recommendation engine for fast experimentations and productionization.
 
 
-## Installation
-```python
-url = f"git+https://github.com/wjlgatech/fast_tfrs.git"
-!pip install --upgrade {url}
-```
-
-## Quick Start
-
-- Check out [fast_tfrs_quickstart.ipynb](https://github.com/wjlgatech/fast_tfrs/blob/master/examples/fast_tfrs_quickstart.ipynb)
-
-- More details: [fast_tfrs_all_code_walkthrough.ipynb](https://github.com/wjlgatech/fast_tfrs/blob/master/examples/fast_tfrs_all_code_walkthrough.ipynb)
-
-
 ## Why fast_tfrs
 
 Built on Google Tensorflow Recommendation Systems [tfrs](https://www.tensorflow.org/recommenders), fast_tfrs aims to be:
@@ -50,6 +37,19 @@ To be specific, I contrast the feature differences between `tfrs` and `fast_tfrs
   - `fast_tfrs` provides 3 tasks -- ranking, retrieval and classification (imbalanced multiclass classification)
 
 `fast_tfrs` is under active development and welcomes community contribution. For recent updates, please visit https://github.com/wjlgatech/fast_tfrs
+
+## Installation
+```python
+url = f"git+https://github.com/wjlgatech/fast_tfrs.git"
+!pip install --upgrade {url}
+```
+
+## Quick Start
+
+- Check out [fast_tfrs_quickstart.ipynb](https://github.com/wjlgatech/fast_tfrs/blob/master/examples/fast_tfrs_quickstart.ipynb)
+
+- More details: [fast_tfrs_all_code_walkthrough.ipynb](https://github.com/wjlgatech/fast_tfrs/blob/master/examples/fast_tfrs_all_code_walkthrough.ipynb)
+
 
 ## Known Issues
 
