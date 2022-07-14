@@ -342,6 +342,9 @@ def prep_tfrs_data(df:pd.DataFrame, label:str, user_id:str, item_id:str, cat_col
 
 
     """
+    # duplicated row indices causes problem
+    df = df.reset_index()
+
     # remove sample rows with nan on label
     if np.isnan(df[label]).any():
       print('===========There is nan in df[label] which will be removed===========')
@@ -748,7 +751,7 @@ default_config = {
  'label_num2str': None, #label_num2str
  'label_str2num': None, #label_str2num
  'layer_sizes': [128, 64, 32],
- 'lr': 0.1,
+ 'learning_rate': 0.1,
  'max_lr': 0.005,
  'min_candidates_count': 5,
  'min_lr': 0.0001,
@@ -1160,7 +1163,7 @@ def df_to_balanced_ds(df:pd.DataFrame,
 
     # split df according to label's different value
     df_ls = [df[df[label]==n] for (n, s) in label_num2str.items()]
-    ds_ls = [df_to_ds(df=df,
+    ds_ls = [df_to_ds(df=df.reset_index(), #duplicated row indices could cause problem for sklearn algo
              flag_training=flag_training,
              batch_size=batch_size,
              shuffle_size=shuffle_size,
@@ -6547,9 +6550,9 @@ def create_model(config:dict,#=default_config,
                                         items=items,
                                         )
 
-    optimizer_dict = {'Adam': tf.keras.optimizers.Adam(learning_rate=config['lr']),
-                      'Adadelta': tf.keras.optimizers.Adadelta(learning_rate=config['lr']),
-                      'Adagrad': tf.keras.optimizers.Adagrad(lr=config['lr'], global_clipnorm=1.0),
+    optimizer_dict = {'Adam': tf.keras.optimizers.Adam(learning_rate=config['learning_rate']),
+                      'Adadelta': tf.keras.optimizers.Adadelta(learning_rate=config['learning_rate']),
+                      'Adagrad': tf.keras.optimizers.Adagrad(lr=config['learning_rate'], global_clipnorm=1.0),
                       }
     model.compile(optimizer=optimizer_dict[optimizer_name],
                   #loss=config['clf_loss_name'], disable here! b/c it's a multi-task optimization
@@ -6882,7 +6885,7 @@ def reload_model(df,#=df,
 
 # Cell
 
-#@title Bayesian Hyperparameters Tuning
+#title Bayesian Hyperparameters Tuning
 
 from bayes_opt import BayesianOptimization
 
@@ -6930,7 +6933,13 @@ def get_best_model(metric='factorized_top_k/top_100_categorical_accuracy',
         'model_type': (-0.49,1.49),
         }
 
-     #unpack global vars & global data
+    # to avoid numeric error 'Queue is empty', multiply pbounds items with small range by pb_scaler; later in fit_model, devide such altered parameters by pb_scaler;REF: https://stackoverflow.com/questions/60045053/queue-is-empty-while-using-bayesian-optimization
+    pb_scaler = 1000
+    d1 = {k:(v[0]*pb_scaler, v[1]*pb_scaler) for (k,v) in pbounds.items() if v[0]<1}
+    d2 = {k:v for (k,v) in pbounds.items() if v[0]>=1}
+    pbounds = {**d1, **d2}
+
+    #unpack global vars & global data
     (label, user_id, item_id, x_cols, u_cols, i_cols, cnt_cols, u_cnt_cols, i_cnt_cols,cnt_cols_to_bin, u_cnt_cols_to_bin, i_cnt_cols_to_bin,bin_cnt_cols, u_bin_cnt_cols, i_bin_cnt_cols, cat_cols, u_cat_cols, i_cat_cols, txt_cols, u_txt_cols, i_txt_cols, img_cols, u_img_cols, i_img_cols, dt_cols, u_dt_cols, i_dt_cols, label_str2num,label_num2str, num_classes, label_keys) = model_config['global_vars']
     #(df, interactions, users, items, unique_user_ids, unique_item_ids, train_df, valid_df, test_df, cached_train, cached_valid, cached_test, test_items) = model_config['global_data']
 
@@ -6960,6 +6969,7 @@ def get_best_model(metric='factorized_top_k/top_100_categorical_accuracy',
               cached_train=cached_train,
               cached_valid=cached_valid,
               cached_test=cached_test,
+              pb_scaler=pb_scaler,
               ):
         """fit a DeepCrossMultitaskModel with parameters
         Args:
@@ -6997,20 +7007,20 @@ def get_best_model(metric='factorized_top_k/top_100_categorical_accuracy',
         model_type_dict = {0:'L1_2task', 1:'VSN_L1_2task'}
 
         # update model config (e.g. default_config_vsn) with user input data
-        model_config['flag_use_norm']=norm_dict[round(flag_use_norm)] # flag_use_norm in {True, False}
-        model_config['rating_weight']=rating_weight
+        model_config['flag_use_norm']=norm_dict[round(flag_use_norm/pb_scaler)] # flag_use_norm in {True, False}
+        model_config['rating_weight']=rating_weight/pb_scaler
         #model_config['classification_weight']=classification_weight
-        model_config['retrieval_weight']=retrieval_weight
+        model_config['retrieval_weight']=retrieval_weight/pb_scaler
         model_config['layer_sizes']=layer_sizes
         model_config['user_layer_sizes']=layer_sizes
         model_config['item_layer_sizes']=layer_sizes
-        model_config['loss_name']=loss_dict[round(loss_name)] #loss_name in {'pairwise', 'listwise', 'mse'}
-        model_config['learning_rate']=learning_rate
-        model_config['l1_l2']=round(l1_l2) #l1_l2 in {0, 1, 2}
-        model_config['alpha']=alpha
-        model_config['dropout_rate']=dropout_rate
+        model_config['loss_name']=loss_dict[round(loss_name/pb_scaler)] #loss_name in {'pairwise', 'listwise', 'mse'}
+        model_config['learning_rate']=learning_rate/pb_scaler
+        model_config['l1_l2']=round(l1_l2/pb_scaler) #l1_l2 in {0, 1, 2}
+        model_config['alpha']=alpha/pb_scaler
+        model_config['dropout_rate']=dropout_rate/pb_scaler
         #model_config['flag_vsn_deep_cross']=norm_dict[round(flag_vsn_deep_cross)]
-        model_config['model_type']=model_type_dict[round(model_type)]
+        model_config['model_type']=model_type_dict[round(model_type/pb_scaler)]
         #model_config['df']=df
         #model_config['interactions']=interactions
         #model_config['items']=items
@@ -7129,6 +7139,9 @@ def get_best_model(metric='factorized_top_k/top_100_categorical_accuracy',
                                         df=df,
                                         interactions=interactions,
                                         items=items,
+                                        cached_train=cached_train,
+                                        cached_valid=cached_valid,
+                                        cached_test=cached_test,
                                         )
 
     # update best_model_config with best learning rate
