@@ -6552,7 +6552,7 @@ def create_model(config:dict,#=default_config,
 
     optimizer_dict = {'Adam': tf.keras.optimizers.Adam(learning_rate=config['learning_rate']),
                       'Adadelta': tf.keras.optimizers.Adadelta(learning_rate=config['learning_rate']),
-                      'Adagrad': tf.keras.optimizers.Adagrad(lr=config['learning_rate'], global_clipnorm=1.0),
+                      'Adagrad': tf.keras.optimizers.Adagrad(learning_rate=config['learning_rate'], global_clipnorm=1.0),
                       }
     model.compile(optimizer=optimizer_dict[optimizer_name],
                   #loss=config['clf_loss_name'], disable here! b/c it's a multi-task optimization
